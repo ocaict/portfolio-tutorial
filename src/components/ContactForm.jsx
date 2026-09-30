@@ -1,18 +1,41 @@
 import { useState } from 'react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+
 export default function ContactForm() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' })
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState({ type: '', message: '' })
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
-    setForm({ name: '', email: '', phone: '', subject: '', message: '' })
-    setTimeout(() => setSubmitted(false), 5000)
+    setLoading(true)
+    setStatus({ type: '', message: '' })
+
+    try {
+      const res = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        setStatus({ type: 'success', message: 'Thank you! Your message has been sent. I\'ll get back to you soon.' })
+        setForm({ name: '', email: '', phone: '', subject: '', message: '' })
+      } else {
+        setStatus({ type: 'error', message: data.error || 'Something went wrong. Please try again.' })
+      }
+    } catch {
+      setStatus({ type: 'error', message: 'Unable to connect. Please try again later or reach me on WhatsApp.' })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -80,19 +103,15 @@ export default function ContactForm() {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary form-submit">
-        Send Message
+      <button type="submit" className="btn btn-primary form-submit" disabled={loading}>
+        {loading ? 'Sending...' : 'Send Message'}
       </button>
 
-      {submitted && (
-        <p style={{ color: 'var(--accent)', fontSize: '0.9rem' }}>
-          Thank you! Your message has been received. I'll get back to you soon.
+      {status.message && (
+        <p style={{ color: status.type === 'success' ? 'var(--accent)' : '#ef4444', fontSize: '0.9rem' }}>
+          {status.message}
         </p>
       )}
-
-      <p className="form-note">
-        This form is currently frontend-only. Connect it to a backend or email service to enable delivery.
-      </p>
     </form>
   )
 }
