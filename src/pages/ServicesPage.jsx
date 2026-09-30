@@ -56,7 +56,7 @@ export default function ServicesPage() {
           </p>
           <div className="hero-actions" style={{ justifyContent: 'center' }}>
             <Link to="/contact" className="btn btn-primary">Contact Me</Link>
-            <a href="https://wa.me/2348165321429" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+            <a href="https://wa.me/2348165321429?text=Hi%20Oluegwu%2C%20I%27d%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
               WhatsApp Me
             </a>
           </div>

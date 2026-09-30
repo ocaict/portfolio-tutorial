@@ -40,7 +40,7 @@ export default function ContactPage() {
 
               <div style={{ marginTop: '32px' }}>
                 <a
-                  href="https://wa.me/2348165321429"
+                  href="https://wa.me/2348165321429?text=Hi%20Oluegwu%2C%20I%27d%20like%20to%20discuss%20a%20project%20with%20you."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"
